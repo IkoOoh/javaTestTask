@@ -1,0 +1,46 @@
+server:
+  port: 1234
+  error:
+    path: /error
+keycloak:
+  auth-server-url: http://localhost:8080
+  realm: testTask
+  resource: testTaskApplication
+  credentials:
+    secret: dQadR1tgcT4hIqv03EGUehoI4sJKuBC6
+  public-client: true
+logging:
+  level:
+    root: INFO
+  #  org.springframework: DEBUG  
+  #  com.prj.testTask: DEBUG  
+  #file:
+  #  name: logs/spring-boot-application.log  
+  #pattern:
+  #  console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"
+  #  file: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/testTask
+      client:
+        registration:
+          keycloak:
+            client-id: testTaskApplication
+            client-secret: dQadR1tgcT4hIqv03EGUehoI4sJKuBC6
+            authorization-grant-type: authorization_code
+            scope: openid, profile
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/testTask
+  datasource:
+    url: jdbc:postgresql://localhost:5432/testTask
+    username: postgres
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

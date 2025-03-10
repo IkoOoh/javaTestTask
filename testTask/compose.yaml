@@ -1,0 +1,61 @@
+services:
+  localhost:
+    image: alpine:latest
+    command: sleep infinity
+    ports:
+     - "8080:8080" # Keycloak port
+     - "1234:1234" # oauth-sample port
+     - "5432:5432" # postgres port
+  testtask_postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=testTask'
+      - 'POSTGRES_PASSWORD=1234'
+      - 'POSTGRES_USER=postgres'
+    volumes:
+     - postgres_data:/var/lib/postgresql/data
+
+  testtask_keycloak:
+    container_name: keycloak 
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      - DB_VENDOR=POSTGRES
+      - DB_ADDR=testtask_postgres
+      - DB_DATABASE=keycloak
+      - DB_SCHEMA=public
+      - DB_USER=postgres
+      - DB_PASSWORD=1234
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin  
+      #- KC_DB_URL=jdbc:postgresql://testtask_postgres:5432/keycloak
+    depends_on:
+      - testtask_postgres
+    command: ["start-dev"]
+    network_mode: "service:localhost"
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+
+
+  app:
+    build: .
+    environment:
+      - SERVER_PORT=1234
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/realms/testTask
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=http://localhost:8080/realms/testTask
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_SECRET=1V4GIeVrr9e2nK6m8JjF7NWNhRuTk0sj
+      - KEYCLOAK_CREDENTIALS_SECRET=1V4GIeVrr9e2nK6m8JjF7NWNhRuTk0sj
+      - KEYCLOAK_AUTH_SERVER_URL=http://localhost:8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://testtask_postgres:5432/testTask
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=1234
+    entrypoint: ["sh", "-c", "sleep 20 && java -jar app.jar"]
+    depends_on:
+      - testtask_postgres
+      - testtask_keycloak
+    network_mode: "service:localhost"
+
+volumes:
+  postgres_data:
+    driver: local
+  keycloak_data:
+    driver: local
