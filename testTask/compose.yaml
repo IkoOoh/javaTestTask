@@ -27,7 +27,7 @@ services:
       - DB_PASSWORD=1234
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin  
-      #- KC_DB_URL=jdbc:postgresql://testtask_postgres:5432/keycloak
+      - KC_DB_URL=jdbc:postgresql://localhost:5432/keycloak
     depends_on:
       - testtask_postgres
     command: ["start-dev"]

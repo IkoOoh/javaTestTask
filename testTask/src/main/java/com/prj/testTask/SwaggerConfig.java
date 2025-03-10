@@ -18,7 +18,7 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI api() {
         return new OpenAPI()
-                .servers(List.of(new Server().url("http://localhost:8080").description("Local Server")))
+                .servers(List.of(new Server().url("http://localhost:1234").description("Local Server")))
                 .info(new Info()
                         .title("Patient API")
                         .description("API for patient management")
