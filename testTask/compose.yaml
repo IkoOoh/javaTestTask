@@ -25,9 +25,13 @@ services:
       - DB_SCHEMA=public
       - DB_USER=postgres
       - DB_PASSWORD=1234
+      - KC_DB=postgres
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin  
-      - KC_DB_URL=jdbc:postgresql://localhost:5432/keycloak
+      - KC_DB_URL=jdbc:postgresql://host.docker.internal:5432/keycloak
+      - KC_HOSTNAME=localhost
+      - KC_DB_USERNAME=postgres
+      - KC_DB_PASSWORD=1234
     depends_on:
       - testtask_postgres
     command: ["start-dev"]
@@ -42,8 +46,8 @@ services:
       - SERVER_PORT=1234
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/realms/testTask
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=http://localhost:8080/realms/testTask
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_SECRET=1V4GIeVrr9e2nK6m8JjF7NWNhRuTk0sj
-      - KEYCLOAK_CREDENTIALS_SECRET=1V4GIeVrr9e2nK6m8JjF7NWNhRuTk0sj
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_SECRET=WjU7UqCw3brwK80AygIvIQ13e1k6qjsS
+      - KEYCLOAK_CREDENTIALS_SECRET=WjU7UqCw3brwK80AygIvIQ13e1k6qjsS
       - KEYCLOAK_AUTH_SERVER_URL=http://localhost:8080
       - SPRING_DATASOURCE_URL=jdbc:postgresql://testtask_postgres:5432/testTask
       - DATABASE_USERNAME=postgres
