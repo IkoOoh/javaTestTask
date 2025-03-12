@@ -1,0 +1,383 @@
+{
+	"info": {
+		"_postman_id": "7e8e9bcb-fd57-40dd-b69e-a493688f461b",
+		"name": "api test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42907870"
+	},
+	"item": [
+		{
+			"name": "get all patients",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Extract all patient IDs and put them into a list\", function () {\r",
+							"  const responseBody = pm.response.json();\r",
+							"  const patientIds = responseBody.map(patient => patient.id);\r",
+							"  pm.collectionVariables.set(\"patientIdsList\", JSON.stringify(patientIds));\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/patient/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patient",
+						"search"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "John",
+							"disabled": true
+						},
+						{
+							"key": "gender",
+							"value": "female",
+							"disabled": true
+						},
+						{
+							"key": "startDate",
+							"value": "1979-01-01T00:00:00",
+							"disabled": true
+						},
+						{
+							"key": "endDate",
+							"value": "2005-01-01T00:00:00",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get patient data by id",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const patientIds = pm.collectionVariables.get(\"patientIdsList\");\r",
+							"const patientIdsArray = JSON.parse(patientIds);\r",
+							"\r",
+							"const patientId = patientIdsArray[0];\r",
+							"pm.collectionVariables.set(\"patientId\", patientId);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{appLoc}}/patient/{{patientId}}",
+					"host": [
+						"{{appLoc}}"
+					],
+					"path": [
+						"patient",
+						"{{patientId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post new patient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"ИГОРЕв Иван Иванович\",\r\n    \"gender\": \"male\",\r\n    \"birthDate\": \"2024-01-13T18:25:43\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{appLoc}}/patient",
+					"host": [
+						"{{appLoc}}"
+					],
+					"path": [
+						"patient"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update patient",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const patientIds = pm.collectionVariables.get(\"patientIdsList\");\r",
+							"const patientIdsArray = JSON.parse(patientIds);\r",
+							"\r",
+							"const patientId = patientIdsArray[0];\r",
+							"pm.collectionVariables.set(\"patientId\", patientId);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"6c3af7c5-2182-440c-9a03-7ebe123bba04\",\r\n    \"name\": \"ИГОРЕв Иван Иванович\",\r\n    \"gender\": \"male\",\r\n    \"birthDate\": \"2024-01-13T18:25:43\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{appLoc}}/patient/{{patientId}}",
+					"host": [
+						"{{appLoc}}"
+					],
+					"path": [
+						"patient",
+						"{{patientId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete patient",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const patientIds = pm.collectionVariables.get(\"patientIdsList\");\r",
+							"const patientIdsArray = JSON.parse(patientIds);\r",
+							"\r",
+							"const patientId = patientIdsArray[0];\r",
+							"pm.collectionVariables.set(\"patientId\", patientId);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{appLoc}}/patient/{{patientId}}",
+					"host": [
+						"{{appLoc}}"
+					],
+					"path": [
+						"patient",
+						"{{patientId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get access token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"{{patient_name}}\",\r\n    \"password\": \"{{patient_password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "refresh token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refreshToken\": \"eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI2YzMzMzk4Yi0xNTNkLTQyZWEtOTJmMC0xYzIyMjMzZDE3NTMifQ.eyJleHAiOjE3NDE1MTg1NzMsImlhdCI6MTc0MTUxNjc3MywianRpIjoiOGFlMGEzNjctYzA0NC00YTU0LTg5ZDYtM2NjZGY3NGJmZjdjIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo5MDkwL3JlYWxtcy90ZXN0VGFzayIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTA5MC9yZWFsbXMvdGVzdFRhc2siLCJzdWIiOiI4YmQ2ZDc0NC04Zjk0LTRlNzktYTcwMy1mNGViNDYwN2Q2MzMiLCJ0eXAiOiJSZWZyZXNoIiwiYXpwIjoidGVzdFRhc2tBcHBsaWNhdGlvbiIsInNpZCI6IjU3ZmYzMWQ1LTA4YjItNDljYS04ZmViLWJhYzMzZWExMWM5NiIsInNjb3BlIjoicm9sZXMgYmFzaWMgcHJvZmlsZSB3ZWItb3JpZ2lucyBlbWFpbCBhY3IifQ.Bm7YvkfdA7pbrX5v7ClWjJAGJoeObBWxl_87t-JYb4X2PEMmsrubnOKgtceBwQQbdscZd6-KuviPCy6Kkr4E6Q\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/refresh-token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"refresh-token"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "appLoc",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "patientIdsList",
+			"value": ""
+		},
+		{
+			"key": "patientId",
+			"value": ""
+		}
+	]
+}

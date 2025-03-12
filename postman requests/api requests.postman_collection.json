@@ -1,0 +1,301 @@
+{
+	"info": {
+		"_postman_id": "cd785de5-5f4f-494f-8594-6f346652fffd",
+		"name": "api requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42907870"
+	},
+	"item": [
+		{
+			"name": "get patient data",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{appLoc}}/patient/c127329e-aa29-44f6-b27b-187e37229a12",
+					"host": [
+						"{{appLoc}}"
+					],
+					"path": [
+						"patient",
+						"c127329e-aa29-44f6-b27b-187e37229a12"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post new patient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"ИГОРЕв Иван Иванович\",\r\n    \"gender\": \"male\",\r\n    \"birthDate\": \"2024-01-13T18:25:43\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{appLoc}}/patient",
+					"host": [
+						"{{appLoc}}"
+					],
+					"path": [
+						"patient"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update patient",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"ИГОРЕв Иван Иванович\",\r\n    \"gender\": \"male\",\r\n    \"birthDate\": \"2024-01-13T18:25:43\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{appLoc}}/patient/8d4b406c-104a-43f8-816f-4ebe458b76e7",
+					"host": [
+						"{{appLoc}}"
+					],
+					"path": [
+						"patient",
+						"8d4b406c-104a-43f8-816f-4ebe458b76e7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete patient",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{appLoc}}/patient/8d4b406c-104a-43f8-816f-4ebe458b76e7",
+					"host": [
+						"{{appLoc}}"
+					],
+					"path": [
+						"patient",
+						"8d4b406c-104a-43f8-816f-4ebe458b76e7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"{{patient_name}}\",\r\n    \"password\": \"{{patient_password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "refresh token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refreshToken\": \"eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI2YzMzMzk4Yi0xNTNkLTQyZWEtOTJmMC0xYzIyMjMzZDE3NTMifQ.eyJleHAiOjE3NDE1MTg1NzMsImlhdCI6MTc0MTUxNjc3MywianRpIjoiOGFlMGEzNjctYzA0NC00YTU0LTg5ZDYtM2NjZGY3NGJmZjdjIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo5MDkwL3JlYWxtcy90ZXN0VGFzayIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTA5MC9yZWFsbXMvdGVzdFRhc2siLCJzdWIiOiI4YmQ2ZDc0NC04Zjk0LTRlNzktYTcwMy1mNGViNDYwN2Q2MzMiLCJ0eXAiOiJSZWZyZXNoIiwiYXpwIjoidGVzdFRhc2tBcHBsaWNhdGlvbiIsInNpZCI6IjU3ZmYzMWQ1LTA4YjItNDljYS04ZmViLWJhYzMzZWExMWM5NiIsInNjb3BlIjoicm9sZXMgYmFzaWMgcHJvZmlsZSB3ZWItb3JpZ2lucyBlbWFpbCBhY3IifQ.Bm7YvkfdA7pbrX5v7ClWjJAGJoeObBWxl_87t-JYb4X2PEMmsrubnOKgtceBwQQbdscZd6-KuviPCy6Kkr4E6Q\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/refresh-token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"refresh-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get patients by characteristics",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/patient/search?gender=female&startDate=1979-01-01T00:00:00",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patient",
+						"search"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "John",
+							"disabled": true
+						},
+						{
+							"key": "gender",
+							"value": "female"
+						},
+						{
+							"key": "startDate",
+							"value": "1979-01-01T00:00:00"
+						},
+						{
+							"key": "endDate",
+							"value": "2005-01-01T00:00:00",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "appLoc",
+			"value": "http://localhost:8080\n",
+			"type": "string"
+		}
+	]
+}
