@@ -26,7 +26,4 @@ Keycloak - http://localhost:8080
    - Роль: `PRACTITIONER`
 
 Им доступны соответсвующие запросы
-## 
-Для нормальной работы Keycloak нужно установить правильную конфигурацию.
-чтобы это сделать нужно взять json файл с конфигурацией и с помощью скрипта bin/kc.[sh|bat] import --file <file> в директории keycloak и импортировать его в проект
-подробнее https://www.keycloak.org/server/importExport
+
