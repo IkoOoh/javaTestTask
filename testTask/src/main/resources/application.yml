@@ -7,7 +7,7 @@ keycloak:
   realm: testTask
   resource: testTaskApplication
   credentials:
-    secret: dQadR1tgcT4hIqv03EGUehoI4sJKuBC6
+    secret: WjU7UqCw3brwK80AygIvIQ13e1k6qjsS
   public-client: true
 logging:
   level:
@@ -30,7 +30,7 @@ spring:
         registration:
           keycloak:
             client-id: testTaskApplication
-            client-secret: dQadR1tgcT4hIqv03EGUehoI4sJKuBC6
+            client-secret: WjU7UqCw3brwK80AygIvIQ13e1k6qjsS
             authorization-grant-type: authorization_code
             scope: openid, profile
         provider:

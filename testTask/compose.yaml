@@ -1,12 +1,6 @@
 services:
-  localhost:
-    image: alpine:latest
-    command: sleep infinity
-    ports:
-     - "8080:8080" # Keycloak port
-     - "1234:1234" # oauth-sample port
-     - "5432:5432" # postgres port
   testtask_postgres:
+    restart: always
     image: 'postgres:latest'
     environment:
       - 'POSTGRES_DB=testTask'
@@ -14,49 +8,61 @@ services:
       - 'POSTGRES_USER=postgres'
     volumes:
      - postgres_data:/var/lib/postgresql/data
+    networks:
+     - keycloak-net
+    ports:
+     - "5432:5432"
 
   testtask_keycloak:
     container_name: keycloak 
     image: quay.io/keycloak/keycloak:latest
     environment:
-      - DB_VENDOR=POSTGRES
-      - DB_ADDR=testtask_postgres
-      - DB_DATABASE=keycloak
-      - DB_SCHEMA=public
-      - DB_USER=postgres
-      - DB_PASSWORD=1234
+      - KC_HOSTNAME=keycloak
+      - KEYCLOAK_IMPORT=/opt/keycloak/data/import/realm.json
+      - KEYCLOAK_HOSTNAME_BACKCHANNEL_DYNAMIC=true
       - KC_DB=postgres
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin  
-      - KC_DB_URL=jdbc:postgresql://host.docker.internal:5432/keycloak
-      - KC_HOSTNAME=localhost
+      - KC_DB_URL=jdbc:postgresql://testtask_postgres:5432/keycloak
       - KC_DB_USERNAME=postgres
       - KC_DB_PASSWORD=1234
     depends_on:
       - testtask_postgres
     command: ["start-dev"]
-    network_mode: "service:localhost"
     volumes:
       - keycloak_data:/opt/keycloak/data
+      - ./src/main/resources/keycloak.json:/opt/keycloak/data/import/realm.json
+    networks:
+      - keycloak-net
+    ports:
+      - "8080:8080"
 
 
   app:
+    restart: always
     build: .
     environment:
       - SERVER_PORT=1234
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/realms/testTask
-      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=http://localhost:8080/realms/testTask
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://keycloak:8080/realms/testTask
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/testTask
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_SECRET=WjU7UqCw3brwK80AygIvIQ13e1k6qjsS
       - KEYCLOAK_CREDENTIALS_SECRET=WjU7UqCw3brwK80AygIvIQ13e1k6qjsS
-      - KEYCLOAK_AUTH_SERVER_URL=http://localhost:8080
+      - KEYCLOAK_AUTH_SERVER_URL=http://keycloak:8080
       - SPRING_DATASOURCE_URL=jdbc:postgresql://testtask_postgres:5432/testTask
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=1234
-    entrypoint: ["sh", "-c", "sleep 20 && java -jar app.jar"]
+    entrypoint: ["sh", "-c", "sleep 1 && java -jar app.jar"]
     depends_on:
       - testtask_postgres
       - testtask_keycloak
-    network_mode: "service:localhost"
+    networks:
+      - keycloak-net
+    ports:
+      - "1234:1234"
+
+networks:
+  keycloak-net:
+    driver: bridge
 
 volumes:
   postgres_data:
